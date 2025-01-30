@@ -3,7 +3,7 @@ import { extendTheme } from "@mui/material/styles";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import { AppProvider } from "@toolpad/core/AppProvider";
 import { DashboardLayout } from "@toolpad/core/DashboardLayout";
-import Grid from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import Dashboard from "./dashboard";
 import { Toolbar, Typography, InputBase, IconButton, Menu, MenuItem, Box, Divider } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
@@ -12,6 +12,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 const NAVIGATION = [
   { kind: "header", title: "Main items" },
   { segment: "dashboard", title: "Cases", icon: <DashboardIcon /> },
+
 ];
 
 const demoTheme = extendTheme({
@@ -84,8 +85,11 @@ export default function SearchAppBar1() {
           </Box>
         </Toolbar>
         <Divider />
-        <Grid container spacing={2}>
+        <Grid container spacing={0} sx={{ width: "100%", margin: 0 }}>
+
+     
           <Grid item xs={12} md={12} className="aaaa">
+       
             <Dashboard />
           </Grid>
          
