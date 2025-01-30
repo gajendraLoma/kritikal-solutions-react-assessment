@@ -1,3 +1,6 @@
+import { useState } from "react";
+import PropTypes from "prop-types"; 
+
 import Grid from "@mui/material/Grid";
 import { 
   Card, CardContent, CardMedia, CardActions, 
@@ -7,30 +10,63 @@ import { useTheme } from '@mui/material/styles';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
+import PauseIcon from '@mui/icons-material/Pause';
 
 const cardsData = [
-  { title: "Card 1", gridImage: "./public/contemplative-reptile.jpg", listImage: "./public/live-from-space.jpg", description: "Description for card 1" },
-  { title: "Card 2", gridImage: "./public/contemplative-reptile.jpg", listImage: "./public/live-from-space.jpg", description: "Description for card 2" },
-  { title: "Card 3", gridImage: "./public/contemplative-reptile.jpg", listImage: "./public/live-from-space.jpg", description: "Description for card 3" },
-  { title: "Card 4", gridImage: "./public/contemplative-reptile.jpg", listImage: "./public/live-from-space.jpg", description: "Description for card 4" },
-  { title: "Card 5", gridImage: "./public/contemplative-reptile.jpg", listImage: "./public/live-from-space.jpg", description: "Description for card 5" },
-  { title: "Card 6", gridImage: "./public/contemplative-reptile.jpg", listImage: "./public/live-from-space.jpg", description: "Description for card 6" },
-  { title: "Card 7", gridImage: "./public/contemplative-reptile.jpg", listImage: "./public/live-from-space.jpg", description: "Description for card 7" },
-  { title: "Card 8", gridImage: "./public/contemplative-reptile.jpg", listImage: "./public/live-from-space.jpg", description: "Description for card 8" },
-  { title: "Card 9", gridImage: "./public/contemplative-reptile.jpg", listImage: "./public/live-from-space.jpg", description: "Description for card 9" },
-  { title: "Card 10", gridImage: "./public/contemplative-reptile.jpg", listImage: "./public/live-from-space.jpg", description: "Description for card 10" },
+  { title: "Card 1", play : "./public/play/hindi-deshbhakthi-geet.mp3", gridImage: "./public/contemplative-reptile.jpg", listImage: "./public/live-from-space.jpg", description: "Description for card 1" },
+  { title: "Card 2", play : "./public/play/full-song-veer-zaara.mp3", gridImage: "./public/contemplative-reptile.jpg", listImage: "./public/live-from-space.jpg", description: "Description for card 2" },
+  { title: "Card 3", play : "./public/play/inauguration-ceremony-trump-inauguration.mp3", gridImage: "./public/contemplative-reptile.jpg", listImage: "./public/live-from-space.jpg", description: "Description for card 3" },
+  { title: "Card 4", play : "./public/play/insaaf.mp4", gridImage: "./public/contemplative-reptile.jpg", listImage: "./public/live-from-space.jpg", description: "Description for card 4" },
+  { title: "Card 5", play : "./public/play/hindi-deshbhakthi-geet.mp3", gridImage: "./public/contemplative-reptile.jpg", listImage: "./public/live-from-space.jpg", description: "Description for card 5" },
+  { title: "Card 6", play : "./public/play/full-song-veer-zaara.mp3", gridImage: "./public/contemplative-reptile.jpg", listImage: "./public/live-from-space.jpg", description: "Description for card 6" },
+  { title: "Card 7", play : "./public/play/inauguration-ceremony-trump-inauguration.mp3", gridImage: "./public/contemplative-reptile.jpg", listImage: "./public/live-from-space.jpg", description: "Description for card 7" },
+  { title: "Card 8", play : "./public/play/insaaf.mp4", gridImage: "./public/contemplative-reptile.jpg", listImage: "./public/live-from-space.jpg", description: "Description for card 8" },
+  { title: "Card 9", play : "./public/play/hindi-deshbhakthi-geet.mp3", gridImage: "./public/contemplative-reptile.jpg", listImage: "./public/live-from-space.jpg", description: "Description for card 9" },
+  { title: "Card 10", play : "./public/play/full-song-veer-zaara.mp3", gridImage: "./public/contemplative-reptile.jpg", listImage: "./public/live-from-space.jpg", description: "Description for card 10" },
 ];
 
 
+
+
 const Cards = ({ viewMode }) => {
+
   const theme = useTheme();
+  const [currentPlaying, setCurrentPlaying] = useState(null);
+  const [audioRefs, setAudioRefs] = useState({});
+
+  const handlePlayPause = (audioSrc) => {
+    if (currentPlaying && currentPlaying !== audioSrc) {
+      audioRefs[currentPlaying]?.pause();
+    }
+
+    if (!audioRefs[audioSrc]) {
+      const newAudio = new Audio(audioSrc);
+      setAudioRefs((prev) => ({ ...prev, [audioSrc]: newAudio }));
+      newAudio.play();
+      setCurrentPlaying(audioSrc);
+
+      newAudio.onended = () => {
+        setCurrentPlaying(null);
+      };
+    } else {
+      const audio = audioRefs[audioSrc];
+      if (audio.paused) {
+        audio.play();
+        setCurrentPlaying(audioSrc);
+      } else {
+        audio.pause();
+        setCurrentPlaying(null);
+      }
+    }
+  };
+
 
   return (
 
       <Grid 
         container 
         spacing={viewMode === "grid" ? 3 : 2} 
-        className="ccccc"
+       
       >
         {cardsData.map((card, index) => (
           viewMode === "grid" ? (
@@ -99,9 +135,13 @@ const Cards = ({ viewMode }) => {
                     <IconButton aria-label="previous">
                       {theme.direction === "rtl" ? <SkipNextIcon /> : <SkipPreviousIcon />}
                     </IconButton>
-                    <IconButton aria-label="play/pause">
-                      <PlayArrowIcon sx={{ height: 38, width: 38 }} />
-                    </IconButton>
+                 
+                    <IconButton aria-label="play/pause" onClick={() => handlePlayPause(card.play)}>
+                    {currentPlaying === card.play ? <PauseIcon sx={{ height: 38, width: 38 }} /> : <PlayArrowIcon sx={{ height: 38, width: 38 }} />}
+                  </IconButton>
+
+                  
+
                     <IconButton aria-label="next">
                       {theme.direction === "rtl" ? <SkipPreviousIcon /> : <SkipNextIcon />}
                     </IconButton>
@@ -116,4 +156,8 @@ const Cards = ({ viewMode }) => {
   );
 };
 
+
+Cards.propTypes = {
+  viewMode: PropTypes.string.isRequired, 
+};
 export default Cards;

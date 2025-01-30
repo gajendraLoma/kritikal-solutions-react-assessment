@@ -57,7 +57,7 @@ function Dashboard() {
 
   return (
     <div>
-      <Grid  spacing={1}>
+      <Grid >
         <Grid item xs={12}>
           <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
             <Tab label="All Cases" {...a11yProps(0)} />
