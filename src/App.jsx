@@ -10,17 +10,6 @@ function App() {
 </div>
     </>
   )
-
-
-
-
 }
-<style>
-  {`
-  
-  .app {
-  }
-  
-  `}
-</style>
+
 export default App
